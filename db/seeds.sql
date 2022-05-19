@@ -5,10 +5,10 @@ VALUES ("Sales"),
 
 
 INSERT INTO role (title, salary, department_id)
-VALUES ("Associate", 40,000, 1),
-       ("Manager", 50,000, 2);
+VALUES ("Associate", 40000, 1),
+       ("Manager", 50000, 2);
 
 
-INSERT INTO role (first_name, last_name, role_id, manager_id)
-VALUES ("Burk", "Teresa", 1, 1),
-       ("Currie", "Stephen", 2, 2);
+INSERT INTO employee (first_name, last_name, role_id, manager_id)
+VALUES ("Teresa", "Burk", 1, 1),
+       ("Stephen", "Currie", 2, 1);
