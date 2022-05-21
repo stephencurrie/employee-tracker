@@ -1,7 +1,5 @@
 const inquirer = require('inquirer');
-const fs = require('fs');
-
-// call once somewhere in the beginning of the app
+const mysql = require('mysql2');
 const cTable = require('console.table');
 // console.table([
 //   {
@@ -13,15 +11,22 @@ const cTable = require('console.table');
 //   }
 // ]);
 
-// prints
-// name  age
-// ----  ---
-// foo   10
-// bar   20
 
-// Collects input from command prompt
 
-// This is the method to ask which team member you want to add, and then to call that particular function
+// Connect to database
+const db = mysql.createConnection(
+    {
+      host: 'localhost',
+      user: 'root',
+      password: 'root',
+      database: 'hr_db'
+    },
+    console.log(`Connected to the hr_db database.`)
+  );
+
+
+// Collects options from command prompt and initiates that function
+
 const promptOptions = () => {
     return inquirer
       .prompt([
@@ -66,12 +71,35 @@ const promptOptions = () => {
   };
 
   const viewAllEmployees = () => {
+console.log("Here are all the employees");
 
-  };
+
+
+//   db.connect(function(err) {
+//     if (err) throw err;
+//     db.query("SELECT * FROM employee", function (err, result, first_name) {
+//       if (err) throw err;
+//       console.table(result);
+//       promptOptions();
+//     });
+//   });
+// };
+
+db.connect(function(err) {
+    if (err) throw err;
+    db.query("SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, manager_id AS manager FROM employee JOIN role on role.id = employee.role_id JOIN department on department.id = role.department_id;", function (err, result, first_name) {
+      if (err) throw err;
+      console.table(result);
+      promptOptions();
+    });
+  });
+};
+
 
   const addEmployee = () => {
 
 };
+
 
 const updateEmployeeRole = () => {
 
