@@ -73,11 +73,8 @@ const promptOptions = () => {
       });
   };
 
-  const viewAllEmployees = () => {
+const viewAllEmployees = () => {
 console.log("Here are all the employees");
-
-
-
 
 db.connect(function(err) {
     if (err) throw err;
@@ -138,12 +135,39 @@ const addRole = () => {
 };
 
 const viewAllDepartments = () => {
+console.log("Here are all the departments");
+
+db.connect(function(err) {
+    if (err) throw err;
+    db.query("SELECT department.id, department.name FROM department;", function (err, result, first_name) {
+      if (err) throw err;
+      console.table(result);
+      promptOptions();
+    });
+  });
 
 };
 
 const addDepartment = () => {
+    return inquirer.prompt([
+        {
+          type: 'input',
+          name: 'departmentname',
+          message: 'What is the name of the department?',
+        },
+    ]);
 
-};
+    db.connect(function(err) {
+        var sql = "INSERT INTO department (name) VALUES (departmentname)";
+        db.query(sql, function (err, result) {
+          if (err) throw err;
+          console.log("1 record inserted");
+        });
+        });
+      };
+
+
+
 
 const quit = () => {
     db.end()
