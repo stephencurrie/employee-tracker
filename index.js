@@ -78,15 +78,6 @@ console.log("Here are all the employees");
 
 
 
-//   db.connect(function(err) {
-//     if (err) throw err;
-//     db.query("SELECT * FROM employee", function (err, result, first_name) {
-//       if (err) throw err;
-//       console.table(result);
-//       promptOptions();
-//     });
-//   });
-// };
 
 db.connect(function(err) {
     if (err) throw err;
@@ -98,10 +89,40 @@ db.connect(function(err) {
   });
 };
 
-
+// NEED TO GET THIS WORKING
   const addEmployee = () => {
+    return inquirer.prompt([
+        {
+          type: 'input',
+          name: 'first_name',
+          message: 'What is the employees first name?',
+        },
+        {
+          type: 'input',
+          name: 'last_name',
+          message: 'What is the employees last name',
+        },
+        {
+          type: 'input',
+          name: 'role',
+          message: 'What is the employees role?',
+        },
+        {
+          type: 'list',
+          name: 'manager',
+          message: 'Who is the employees manager?',
+          choices: [
+              //Need this to be a variable and dynamic array
+            {value: '', name: "Stephen Currie"},
+            {value: '', name: "Teresa Burk"},
+             ],
+  
+        },
+      ]);
+    };
 
-};
+
+
 
 
 const updateEmployeeRole = () => {
