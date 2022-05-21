@@ -42,6 +42,7 @@ const promptOptions = () => {
             { value: "addRole", name: "Add Role" },
             { value: "viewAllDepartments", name: "View All Departments" },
             { value: "addDepartment", name: "Add Department" },
+            { value: "quit", name: "Quit" },
             
           ],
         },
@@ -61,6 +62,8 @@ const promptOptions = () => {
             viewAllDepartments();
         } else if (answers.options === "addDepartment") {
             addDepartment();
+        } else if (answers.options === "quit") {
+            quit();
             
         } else {
           finish()
@@ -119,6 +122,10 @@ const viewAllDepartments = () => {
 
 const addDepartment = () => {
 
+};
+
+const quit = () => {
+    db.end()
 };
 
 const finish = () => {
