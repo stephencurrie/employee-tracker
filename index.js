@@ -127,6 +127,16 @@ const updateEmployeeRole = () => {
 };
 
 const viewAllRoles = () => {
+console.log("Here are all the roles");
+
+db.connect(function(err) {
+    if (err) throw err;
+    db.query("SELECT role.id, role.title, department.name AS department, role.salary FROM role JOIN department on department.id = role.department_id;", function (err, result, first_name) {
+      if (err) throw err;
+      console.table(result);
+      promptOptions();
+    });
+  });
 
 };
 
