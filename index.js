@@ -51,9 +51,7 @@ const promptOptions = () => {
         addDepartment();
       } else if (answers.options === "quit") {
         quit();
-      } else {
-        finish();
-      }
+      } 
     });
 };
 
@@ -63,7 +61,7 @@ const viewAllEmployees = () => {
   db.connect(function (err) {
     if (err) throw err;
     db.query(
-      "SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, manager_id AS manager FROM employee JOIN role on role.id = employee.role_id JOIN department on department.id = role.department_id;",
+      "SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, CONCAT(manager.first_name , ' ' , manager.last_name) AS manager FROM employee JOIN role on role.id = employee.role_id JOIN department on department.id = role.department_id JOIN employee manager on manager.id = employee.manager_id;",
       function (err, result, first_name) {
         if (err) throw err;
         console.table(result);
@@ -73,7 +71,7 @@ const viewAllEmployees = () => {
   });
 };
 
-// NEED TO GET THIS WORKING
+// Add Employee Function
 const addEmployee = () => {
   db.connect(function (err) {
     if (err) throw err;
@@ -134,7 +132,56 @@ const addEmployee = () => {
   });
 };
 
-const updateEmployeeRole = () => {};
+const updateEmployeeRole = () => {
+    db.connect(function (err) {
+        if (err) throw err;
+        db.query(
+          "SELECT id, CONCAT(first_name , ' ' , last_name) AS fullname FROM employee;",
+          function (err, result) {
+            if (err) throw err;
+
+            const allEmployees = result.map((employee) => {
+              return { name: employee.fullname, value: employee.id };
+            });
+            db.query("SELECT id, title FROM role;", function (err, result) {
+              if (err) throw err;
+    
+              const allRoles = result.map((role) => {
+                return { name: role.title, value: role.id };
+              });
+    
+              return inquirer
+                .prompt([
+                {
+                        type: "list",
+                        name: "employees",
+                        message: "Which Employees role do you want to update?",
+                        choices: allEmployees,
+                },
+                 {
+                    type: "list",
+                    name: "role",
+                    message: "Which role do you want to assign the selected employee?",
+                    choices: allRoles,
+                  },
+// Look at this UPDATE->
+                ])
+                .then((answers) => {
+                    db.connect(function (err) {
+                        var sql = `UPDATE employee SET (id, role_id)
+                        VALUES (${answers.employees}, ${answers.role})`;
+                        db.query(sql, function (err, result) {
+                          if (err) throw err;
+                          console.log("1 record udpated");
+                          promptOptions();
+                        });
+                      });
+                });
+            });
+          }
+        );
+      });
+    }
 
 const viewAllRoles = () => {
   console.log("Here are all the roles");
@@ -236,7 +283,7 @@ const quit = () => {
   db.end();
 };
 
-const finish = () => {};
+
 
 const init = () => {
   promptOptions();
