@@ -152,7 +152,47 @@ const viewAllRoles = () => {
   });
 };
 
-const addRole = () => {};
+const addRole = () => {
+    db.query("SELECT id, name FROM department;", function (err, result) {
+        if (err) throw err;
+
+        const allDepartments = result.map((department) => {
+          return { name: department.name, value: department.id };
+        });
+
+
+
+    return inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "rolename",
+        message: "What is the name of the role?",
+      },
+      {
+        type: "input",
+        name: "salary",
+        message: "What is the salary of the role?",
+      },
+      {
+        type: "list",
+        name: "department",
+        message: "Which department does the role belong to?",
+        choices: allDepartments,
+      },
+    ])
+    .then((answers) => {
+      db.connect(function (err) {
+        var sql = `INSERT INTO role (title, salary, department_id) 
+        VALUES ('${answers.rolename}', ${answers.salary}, ${answers.department})`;
+        db.query(sql, function (err, result) {
+          if (err) throw err;
+          console.log("1 record inserted");
+          promptOptions();
+        });
+      });
+    });
+});
 
 const viewAllDepartments = () => {
   console.log("Here are all the departments");
@@ -168,7 +208,8 @@ const viewAllDepartments = () => {
       }
     );
   });
-};
+}
+}
 
 const addDepartment = () => {
   return inquirer
