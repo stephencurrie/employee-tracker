@@ -69,7 +69,7 @@ const viewAllEmployees = () => {
       }
     );
   });
-};
+}
 
 // Add Employee Function
 const addEmployee = () => {
@@ -130,7 +130,7 @@ const addEmployee = () => {
       }
     );
   });
-};
+}
 
 const updateEmployeeRole = () => {
     db.connect(function (err) {
@@ -168,15 +168,27 @@ const updateEmployeeRole = () => {
                 ])
                 .then((answers) => {
                     db.connect(function (err) {
-                        var sql = `UPDATE employee SET (id, role_id)
-                        VALUES (${answers.employees}, ${answers.role})`;
+                        var sql = `WHERE id = (${answers.employees})
+                        UPDATE employee SET (role_id)
+                        VALUES (${answers.role})`;
                         db.query(sql, function (err, result) {
                           if (err) throw err;
-                          console.log("1 record udpated");
+                          console.log("1 record updated");
                           promptOptions();
                         });
                       });
                 });
+                // .then((answers) => {
+                //     db.connect(function (err) {
+                //         var sql = `UPDATE employee SET (id, role_id)
+                //         VALUES (${answers.employees}, ${answers.role})`;
+                //         db.query(sql, function (err, result) {
+                //           if (err) throw err;
+                //           console.log("1 record updated");
+                //           promptOptions();
+                //         });
+                //       });
+                // });
             });
           }
         );
@@ -197,7 +209,7 @@ const viewAllRoles = () => {
       }
     );
   });
-};
+}
 
 const addRole = () => {
     db.query("SELECT id, name FROM department;", function (err, result) {
@@ -240,6 +252,7 @@ const addRole = () => {
       });
     });
 });
+}
 
 const viewAllDepartments = () => {
   console.log("Here are all the departments");
@@ -256,7 +269,7 @@ const viewAllDepartments = () => {
     );
   });
 }
-}
+
 
 const addDepartment = () => {
   return inquirer
@@ -277,7 +290,7 @@ const addDepartment = () => {
         });
       });
     });
-};
+}
 
 const quit = () => {
   db.end();
