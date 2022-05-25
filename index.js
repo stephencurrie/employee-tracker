@@ -1,17 +1,24 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql2");
 const cTable = require("console.table");
+const figlet = require('figlet');
+
+
+
 
 // Connect to database
 const db = mysql.createConnection(
-  {
-    host: "localhost",
-    user: "root",
-    password: "root",
-    database: "hr_db",
-  },
-  console.log(`Connected to the hr_db database.`)
-);
+    {
+      host: "localhost",
+      user: "root",
+      password: "root",
+      database: "hr_db",
+    },
+    console.log(`Employee Manager`)
+  );
+  
+
+
 
 // Collects options from command prompt and initiates that function
 
@@ -164,13 +171,11 @@ const updateEmployeeRole = () => {
                     message: "Which role do you want to assign the selected employee?",
                     choices: allRoles,
                   },
-// Look at this UPDATE->
+
                 ])
                 .then((answers) => {
                     db.connect(function (err) {
-                        var sql = `WHERE id = (${answers.employees})
-                        UPDATE employee SET (role_id)
-                        VALUES (${answers.role})`;
+                        var sql = `UPDATE employee SET role_id = ${answers.role} WHERE id = ${answers.employees}`
                         db.query(sql, function (err, result) {
                           if (err) throw err;
                           console.log("1 record updated");
@@ -294,12 +299,14 @@ const addDepartment = () => {
 
 const quit = () => {
   db.end();
-};
+}
 
 
 
 const init = () => {
+
+
   promptOptions();
-};
+}
 
 init();
